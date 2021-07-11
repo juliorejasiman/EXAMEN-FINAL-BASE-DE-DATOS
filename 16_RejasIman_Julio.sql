@@ -1,6 +1,5 @@
-DROP DATABASE dbMESAJIL
-GO
 
+--Poner en uso master
 use master
 GO
 
@@ -184,7 +183,7 @@ INSERT INTO Vendedores
 	VALUES
 ('15245673','Ruben','Venegas','935356254','79245673','75245674'),
 ('14275873','Julian','Gutierrez','985346254','79245673','74275873'),
-('15245643','Ruben','Venegas','935356254','79245673','73244669')
+('15245643','Roberto','Garcia','935356254','79245673','73244669')
 GO
 
 SELECT * FROM Vendedores
@@ -225,6 +224,10 @@ GO
 SELECT * FROM Sucursal
 GO
 
+
+-- Formato de fecha 
+
+
 SET DATEFORMAT dmy 
 GO
 
@@ -235,8 +238,8 @@ INSERT INTO Venta
 
 
 ('1000','12','21/07/10', '79245673', '75245674','01','15245673'),
-('900','8','21/07/01', '79245673', '73244669','02','14275873'),
-('1200','2','21/07/11', '79245673', '74275873','03','15245643')
+('900','8','21/08/01', '79245673', '73244669','02','14275873'),
+('1200','2','21/09/20', '79245673', '74275873','03','15245643')
 GO
 
 SELECT * FROM Venta
@@ -268,13 +271,41 @@ GO
 CREATE VIEW vwAdministrador
 AS
 SELECT 
-(VE.NOMVEN) + ', ' + (VE.APEVEN) AS 'Vendedor',
-	S.LUGSUC AS 'Sucursal',
+	V.CANPROVENT AS 'Equipos Vendidos',
 	(V.CANPROVENT * V.TOTVENT) AS 'Monto de Venta',
-	V.CANPROVENT AS 'Equipos Vendidos'
+	S.LUGSUC AS 'Sucursal'
 FROM dbo.Vendedores AS VE
 INNER JOIN dbo.Venta AS V
 ON VE.DNIVEN = V.DNIVEN
 INNER JOIN dbo.Sucursal AS S
 ON V.CODSUC = S.CODSUC
+GO
+
+
+
+-- Vista 2
+
+CREATE VIEW vwVendedor
+AS
+SELECT 
+(VE.NOMVEN) + ', ' + (VE.APEVEN) AS 'Vendedor',
+V.CANPROVENT AS 'Rankig de Vendedores'
+FROM dbo.Vendedores AS VE
+INNER JOIN dbo.Venta AS V
+ON VE.DNIVEN = V.DNIVEN
+GO
+
+-- Vista 3
+
+
+CREATE VIEW vwVendedores
+AS
+SELECT 
+(VE.NOMVEN) + ', ' + (VE.APEVEN) AS 'Vendedor',
+	V.FECVEN AS 'Fecha de Venta',
+	V.CANPROVENT AS 'Equipos Vendidos'
+FROM dbo.Vendedores AS VE
+INNER JOIN dbo.Venta AS V
+ON VE.DNIVEN = V.DNIVEN
+
 GO
